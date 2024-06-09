@@ -38,7 +38,7 @@ RUN sed -i 's/sqlite3/postgresql/' config/database.yml
 # Ensure PostgreSQL is ready before continuing
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y netcat && \
-    while ! nc -z localhost 5432; do sleep 1; done
+    apt-get install --no-install-recommends -y netcat-openbsd
 
 # Create and migrate the PostgreSQL database
 RUN bundle exec rails db:create db:migrate
