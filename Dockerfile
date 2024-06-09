@@ -35,14 +35,6 @@ RUN chmod +x bin/rails
 # Switch database adapter to PostgreSQL
 RUN sed -i 's/sqlite3/postgresql/' config/database.yml
 
-# Ensure PostgreSQL is ready before continuing
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y netcat && \
-    apt-get install --no-install-recommends -y netcat-openbsd
-
-# Create and migrate the PostgreSQL database
-RUN bundle exec rails db:create db:migrate
-
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
@@ -67,15 +59,10 @@ RUN useradd rails --create-home --shell /bin/bash && \
 USER rails:rails
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+COPY docker-entrypoint.sh /usr/bin/docker-entrypoint
+RUN chmod +x /usr/bin/docker-entrypoint
+ENTRYPOINT ["docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/rails", "server"]
-# Ensure PostgreSQL is ready before continuing
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y netcat && \
-    while ! nc -z localhost 5432; do sleep 1; done
-
-# Create and migrate the PostgreSQL database (debug mode)
-RUN bundle exec rails db:create && bundle exec rails db:migrate --trace
