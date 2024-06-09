@@ -16,9 +16,9 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
-# Install packages needed to build gems and PostgreSQL client
+# Install packages needed to build gems, PostgreSQL client, and other dependencies
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config postgresql-client
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config postgresql-client libpq-dev
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -35,7 +35,12 @@ RUN chmod +x bin/rails
 # Switch database adapter to PostgreSQL
 RUN sed -i 's/sqlite3/postgresql/' config/database.yml
 
-# Finalize database configuration and migrate
+# Ensure PostgreSQL is ready before continuing
+RUN service postgresql start && \
+    sleep 5 && \
+    pg_isready -q -h localhost -U postgres
+
+# Create and migrate the PostgreSQL database
 RUN bundle exec rails db:create db:migrate
 
 # Precompile bootsnap code for faster boot times
