@@ -11,6 +11,6 @@ user = User.where(email: "hodaoda83@gmail.com").find_or_initialize
 
 User.update
 (
-  password: "hodadoda2610",
-  password_confirmation: "hodadoda2610"
+  password: "password",
+  password_confirmation: "password"
 )
