@@ -36,7 +36,9 @@ RUN chmod +x bin/rails
 RUN sed -i 's/sqlite3/postgresql/' config/database.yml
 
 # Ensure PostgreSQL is ready before continuing
-RUN pg_isready -q -h localhost -U postgres -d postgres
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y netcat && \
+    while ! nc -z localhost 5432; do sleep 1; done
 
 # Create and migrate the PostgreSQL database
 RUN bundle exec rails db:create db:migrate
