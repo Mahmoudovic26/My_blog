@@ -1,0 +1,4 @@
+<h1><%= @blog_post.title %></h1>
+    <p><%= @blog_post.body %></p>
+    <%= link_to "Edit", edit_blog_post_path(@blog_post), class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200" if user_signed_in? %>
+<%= link_to "Blog posts",blog_posts_path, class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200" %>

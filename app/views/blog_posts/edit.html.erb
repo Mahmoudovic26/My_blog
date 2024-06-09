@@ -1,0 +1,5 @@
+<h1> Edit </h1>
+<%= render partial: "form", locals: {blog_post: @blog_post} %>
+
+<%= button_to "Delete", @blog_post, class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200",method: :delete,data: {turbo_confirm: "Are you Sure?"}%>
+<%= link_to "Blog Posts", blog_posts_path , class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200"if user_signed_in? %>
