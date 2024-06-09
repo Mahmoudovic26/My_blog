@@ -30,6 +30,9 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
+# Ensure the bin/rails script is executable
+RUN chmod +x bin/rails
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
@@ -60,15 +63,3 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/rails", "server"]
-# Existing Dockerfile content
-
-# Set the working directory (ensure this points to the correct directory)
-WORKDIR /app
-
-# Add this line to ensure the rails script is executable
-RUN chmod +x bin/rails
-
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
-# Existing Dockerfile content
