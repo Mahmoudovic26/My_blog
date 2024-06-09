@@ -72,3 +72,10 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 CMD ["./bin/rails", "server"]
+# Ensure PostgreSQL is ready before continuing
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y netcat && \
+    while ! nc -z localhost 5432; do sleep 1; done
+
+# Create and migrate the PostgreSQL database (debug mode)
+RUN bundle exec rails db:create && bundle exec rails db:migrate --trace
