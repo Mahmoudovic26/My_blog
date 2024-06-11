@@ -1,3 +1,16 @@
-<h1> New Blog Post </h1>
-<%= render partial: "form", locals: {blog_post: @blog_post}, class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200" %>
-<%= link_to "Blog posts",blog_posts_path, class:"bg-ground-100 px-4 py-2 rounded hover:bg-gray-200" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Blog Post</title>
+<link rel="stylesheet" href="assets/stylesheets/style.css"></head>
+<body>
+    <h1 class="new-post-title">New Blog Post</h1>
+    <%= render partial: "form", locals: {blog_post: @blog_post} %>
+
+    <div class="button-container">
+        <%= link_to "Blog Posts", blog_posts_path, class: "btn" %>
+    </div>
+</body>
+</html>
