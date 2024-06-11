@@ -16,3 +16,11 @@ user.update(
   password: "password",
   password_confirmation: "password"
 )
+# Find or initialize a user with the specified email
+user = User.where(email: "mahmoudabdo@gmail.com").first_or_initialize
+
+# Update the attributes of the user
+user.update(
+  password: "password",
+  password_confirmation: "password"
+)
